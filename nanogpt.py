@@ -143,7 +143,7 @@ class Block(nn.Module):
     self.ln1=nn.LayerNorm(n_embed)
     self.ln2=nn.LayerNorm(n_embed) 
   def forward(self,x):
-    x=x+self.attention(self.ln1(x))
+    x=x+self.attention(self.ln1(x)) # (E + delta E) as 3 blue 1 brown explains 
     x=x+self.feedforward(self.ln2(x))
     return x
 
@@ -153,7 +153,7 @@ class BigramModel(nn.Module):#inheritance from nn.Module: 1>keeps track of train
     super().__init__()#This is required to initialize the parent class's internal state and parameters
     self.embedding=nn.Embedding(vocab_size,n_embed)    #This creates an embeding table/matrix of (vocab_size,no_of_dimension)
     self.positional_embedding=nn.Embedding(block_size,n_embed) #These encodings are learned by the transformers itself but limits the input sequence to be fixed of size=block_length
-    self.linear_block=nn.Linear(n_embed,vocab_size)
+    self.linear_block=nn.Linear(n_embed,vocab_size) #The unembedding matrix 
     self.blocks=nn.Sequential(
       Block(n_head=n_head),
       Block(n_head=n_head),
